@@ -1,0 +1,72 @@
+[
+  {
+    "_id": "6b08aa292a6039db455d904c",
+    "name": "ChronoMagix Admin",
+    "email": "admin@chronomagix.com",
+    "password": "$2a$10$wowMIFj4KplM9h.OHTf22OWAcN8nDCOpM2zvl5fDZtbZuJyolGOeO",
+    "role": "admin",
+    "createdAt": "2026-11-26T21:52:41.023Z",
+    "updatedAt": "2026-11-26T22:30:44.719Z",
+    "__v": 0
+  },
+  {
+    "_id": "6b08aa292a6039db455d904f",
+    "name": "Rahul Sharma",
+    "email": "rahul@chronomagix.com",
+    "password": "$2a$10$1mjjslxkQRrnp1OFCyqcw.uJiIpkSEvq.vS6pdeuLjbMJUuhDN9Aq",
+    "role": "instructor",
+    "createdAt": "2026-11-26T21:52:41.141Z",
+    "updatedAt": "2026-11-26T22:30:44.811Z",
+    "__v": 0
+  },
+  {
+    "_id": "6b08aa292a6039db455d9052",
+    "name": "Priya Nair",
+    "email": "priya@chronomagix.com",
+    "password": "$2a$10$dQX/TS9rooNJ9F7ZOeNkEOPLLUeTEyB1sJBM0nynz2ysyd/MPqNk.",
+    "role": "instructor",
+    "createdAt": "2026-11-26T21:52:41.201Z",
+    "updatedAt": "2026-11-26T22:30:44.933Z",
+    "__v": 0
+  },
+  {
+    "_id": "6b08aa292a6039db455d9055",
+    "name": "Amit Verma",
+    "email": "amit@chronomagix.com",
+    "password": "$2a$10$McXqZXWPgmpwx5luL4YTaezUJ0OBRx3a9Ftt7n6qWbmFtM7RVv3hu",
+    "role": "instructor",
+    "createdAt": "2026-11-26T21:52:41.264Z",
+    "updatedAt": "2026-11-26T22:30:45.019Z",
+    "__v": 0
+  },
+  {
+    "_id": "6b08aa292a6039db455d9058",
+    "name": "Sneha Kulkarni",
+    "email": "sneha@chronomagix.com",
+    "password": "$2a$10$H2xIBJfHOSJOOBvto6btNO58LvFYQZHuF10oEWXbzh1UJAGMGV0JW",
+    "role": "instructor",
+    "createdAt": "2026-11-26T21:52:41.328Z",
+    "updatedAt": "2026-11-26T22:30:45.133Z",
+    "__v": 0
+  },
+  {
+    "_id": "6b08aa292a6039db455d905b",
+    "name": "Vikram Singh",
+    "email": "vikram@chronomagix.com",
+    "password": "$2a$10$Oy8T8yCZjDSSN2dhL1W8pedtav15b6OmvEzwkEE9oe/wd8TP10Tou",
+    "role": "instructor",
+    "createdAt": "2026-11-26T21:52:41.401Z",
+    "updatedAt": "2026-11-26T22:30:45.250Z",
+    "__v": 0
+  },
+  {
+    "_id": "6b08aa292a6039db455d905e",
+    "name": "Neha Joshi",
+    "email": "neha@chronomagix.com",
+    "password": "$2a$10$NKrAjVT7L0OUbasED1HgN.bM3agT/HpprxaIX9WmBogQX/a1Az3ei",
+    "role": "instructor",
+    "createdAt": "2026-11-26T21:52:41.465Z",
+    "updatedAt": "2026-11-26T22:30:45.343Z",
+    "__v": 0
+  }
+]

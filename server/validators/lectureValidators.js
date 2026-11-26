@@ -1,0 +1,10 @@
+import { z } from 'zod';
+import { isRealCalendarDate } from '../utils/dateKey.js';
+const empty = z.object({}).passthrough();
+const id = z.string().regex(/^[a-f\d]{24}$/i, 'Invalid id');
+const date = z.string().refine(isRealCalendarDate, 'Enter a real date as YYYY-MM-DD');
+export const createLectureSchema = z.object({ body: z.object({ instructorId: id, date, title: z.string().trim().max(120).optional() }), params: z.object({ id }), query: empty });
+export const updateLectureSchema = z.object({ body: z.object({ instructorId: id.optional(), date: date.optional(), title: z.string().trim().max(120).optional() }).refine(v => Object.keys(v).length > 0), params: z.object({ id }), query: empty });
+export const lectureIdSchema = z.object({ body: empty, params: z.object({ id }), query: empty });
+export const lectureListSchema = z.object({ body: empty, params: empty, query: z.object({ instructorId: id.optional(), courseId: id.optional(), from: date.optional(), to: date.optional() }) });
+export const availabilitySchema = z.object({ body: empty, params: empty, query: z.object({ date }) });

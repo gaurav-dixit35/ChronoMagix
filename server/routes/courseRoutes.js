@@ -1,0 +1,10 @@
+import { Router } from 'express';
+import * as c from '../controllers/courseController.js';
+import { createForCourse } from '../controllers/lectureController.js';
+import { protect,authorize } from '../middleware/authMiddleware.js';
+import { validate } from '../middleware/validate.js';
+import { imageUpload } from '../middleware/upload.js';
+import { courseBodySchema,courseIdSchema,coursesListSchema,updateCourseSchema } from '../validators/courseValidators.js';
+import { createLectureSchema } from '../validators/lectureValidators.js';
+import { asyncHandler } from '../utils/asyncHandler.js';
+const router=Router(); router.use(protect,authorize('admin')); router.get('/',validate(coursesListSchema),asyncHandler(c.listCourses)); router.post('/',imageUpload.single('image'),validate(courseBodySchema),asyncHandler(c.createCourse)); router.get('/:id',validate(courseIdSchema),asyncHandler(c.getCourse)); router.put('/:id',imageUpload.single('image'),validate(updateCourseSchema),asyncHandler(c.updateCourse)); router.delete('/:id',validate(courseIdSchema),asyncHandler(c.removeCourse)); router.post('/:id/lectures',validate(createLectureSchema),asyncHandler(createForCourse)); export default router;

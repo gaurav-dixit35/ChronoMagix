@@ -1,0 +1,92 @@
+[
+  {
+    "_id": "6b08aa297923dc4e0c948fe8",
+    "instructor": "6b08aa292a6039db455d904f",
+    "date": "2026-11-28",
+    "__v": 0,
+    "course": "6b08aa297923dc4e0c948fe5",
+    "createdAt": "2026-11-26T21:52:41.621Z",
+    "title": "Batch 1",
+    "updatedAt": "2026-11-26T22:31:22.352Z"
+  },
+  {
+    "_id": "6b08aa297923dc4e0c948fe9",
+    "instructor": "6b08aa292a6039db455d9052",
+    "date": "2026-11-29",
+    "__v": 0,
+    "course": "6b08aa297923dc4e0c948fe5",
+    "createdAt": "2026-11-26T21:52:41.649Z",
+    "title": "Batch 2",
+    "updatedAt": "2026-11-26T22:31:22.354Z"
+  },
+  {
+    "_id": "6b08aa297923dc4e0c948fea",
+    "instructor": "6b08aa292a6039db455d9055",
+    "date": "2026-11-30",
+    "__v": 0,
+    "course": "6b08aa297923dc4e0c948fe5",
+    "createdAt": "2026-11-26T21:52:41.653Z",
+    "title": "Batch 3",
+    "updatedAt": "2026-11-26T22:31:22.355Z"
+  },
+  {
+    "_id": "6b08aa297923dc4e0c948feb",
+    "date": "2026-12-01",
+    "instructor": "6b08aa292a6039db455d9055",
+    "__v": 0,
+    "course": "6b08aa297923dc4e0c948fe6",
+    "createdAt": "2026-11-26T21:52:41.658Z",
+    "title": "Batch 1",
+    "updatedAt": "2026-11-26T22:31:22.356Z"
+  },
+  {
+    "_id": "6b08aa297923dc4e0c948fec",
+    "date": "2026-12-02",
+    "instructor": "6b08aa292a6039db455d9058",
+    "__v": 0,
+    "course": "6b08aa297923dc4e0c948fe6",
+    "createdAt": "2026-11-26T21:52:41.660Z",
+    "title": "Batch 2",
+    "updatedAt": "2026-11-26T22:31:22.358Z"
+  },
+  {
+    "_id": "6b08aa297923dc4e0c948fed",
+    "instructor": "6b08aa292a6039db455d905b",
+    "date": "2026-12-03",
+    "__v": 0,
+    "course": "6b08aa297923dc4e0c948fe6",
+    "createdAt": "2026-11-26T21:52:41.663Z",
+    "title": "Batch 3",
+    "updatedAt": "2026-11-26T22:31:22.359Z"
+  },
+  {
+    "_id": "6b08aa297923dc4e0c948fee",
+    "date": "2026-12-04",
+    "instructor": "6b08aa292a6039db455d905b",
+    "__v": 0,
+    "course": "6b08aa297923dc4e0c948fe7",
+    "createdAt": "2026-11-26T21:52:41.666Z",
+    "title": "Batch 1",
+    "updatedAt": "2026-11-26T22:31:22.360Z"
+  },
+  {
+    "_id": "6b08aa297923dc4e0c948fef",
+    "instructor": "6b08aa292a6039db455d905e",
+    "date": "2026-12-05",
+    "__v": 0,
+    "course": "6b08aa297923dc4e0c948fe7",
+    "createdAt": "2026-11-26T21:52:41.668Z",
+    "title": "Batch 2",
+    "updatedAt": "2026-11-26T22:31:22.362Z"
+  },
+  {
+    "_id": "6b08ab057923dc4e0c948ff5",
+    "date": "2026-12-06",
+    "instructor": "6b08aa292a6039db455d9055",
+    "__v": 0,
+    "course": "6b08aa297923dc4e0c948fe7",
+    "createdAt": "2026-11-26T21:56:21.806Z",
+    "title": "Batch 3",
+    "updatedAt": "2026-11-26T22:31:22.363Z"
+  }
+]
