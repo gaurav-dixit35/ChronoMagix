@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="client/public/logo-hero.png" alt="ChronoMagix — Time, scheduled." width="220" />
+  <img src="client/public/logo-hero-transparent.png" alt="ChronoMagix — Time, scheduled." width="220" />
 </p>
 
 <h1 align="center">ChronoMagix</h1>
