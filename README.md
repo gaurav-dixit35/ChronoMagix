@@ -161,7 +161,7 @@ npm.cmd run seed
 npm.cmd run dev
 ```
 
-Set `MONGO_URI` to your database and `JWT_SECRET` to a private random value of at least 32 characters. Open <http://localhost:5173>. Vite proxies `/api` to Express on port 5000. If PowerShell blocks `npm.ps1`, use `npm.cmd`.
+Set `MONGO_URI` to your database and `JWT_SECRET` to a private random value of at least 32 characters. Open <http://localhost:5173>. Vite proxies `/api` to Express on port 5000. The development command reuses a healthy ChronoMagix API or client already running on its expected port, and starts only the missing service; it does not stop existing processes. If one of those ports is occupied by another app, close that app from the terminal that started it, then rerun the command. If PowerShell blocks `npm.ps1`, use `npm.cmd`.
 
 ### Environment variables
 
