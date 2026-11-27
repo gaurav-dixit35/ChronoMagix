@@ -7,4 +7,4 @@ export const createLectureSchema = z.object({ body: z.object({ instructorId: id,
 export const updateLectureSchema = z.object({ body: z.object({ instructorId: id.optional(), date: date.optional(), title: z.string().trim().max(120).optional() }).refine(v => Object.keys(v).length > 0), params: z.object({ id }), query: empty });
 export const lectureIdSchema = z.object({ body: empty, params: z.object({ id }), query: empty });
 export const lectureListSchema = z.object({ body: empty, params: empty, query: z.object({ instructorId: id.optional(), courseId: id.optional(), from: date.optional(), to: date.optional() }) });
-export const availabilitySchema = z.object({ body: empty, params: empty, query: z.object({ date }) });
+export const availabilitySchema = z.object({ body: empty, params: empty, query: z.object({ date, excludeLectureId: id.optional() }) });

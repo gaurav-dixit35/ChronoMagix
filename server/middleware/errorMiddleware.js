@@ -6,7 +6,7 @@ export function errorHandler(error, req, res, next) {
   let code = error.code;
   let message = error.message || 'Something went wrong.';
   if (error.name === 'ValidationError' || error.name === 'CastError') { status = 400; code = 'VALIDATION_ERROR'; }
-  if (error.code === 11000) { status = 409; code = 'INSTRUCTOR_DATE_CLASH'; message = 'This instructor is already assigned to a lecture on that date.'; }
+  if (error.code === 11000) { status = 409; code = 'DUPLICATE_KEY'; message = 'A record with these unique values already exists.'; }
   if (error.name === 'MulterError') { status = error.code === 'LIMIT_FILE_SIZE' ? 413 : 400; code = 'UPLOAD_ERROR'; message = status === 413 ? 'The image must be 2 MB or smaller.' : error.message; }
   const body = { success: false, message, ...(code ? { code } : {}) };
   if (error.details) body.errors = error.details;

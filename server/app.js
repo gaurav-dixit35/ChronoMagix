@@ -35,7 +35,19 @@ app.use('/api/lectures', lectureRoutes);
 app.use('/api/instructor', instructorPanelRoutes);
 if (env.NODE_ENV === 'production') {
   const clientDist = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../client/dist');
-  app.use(express.static(clientDist, { index: false, maxAge: '1y', immutable: true }));
+  app.use(express.static(clientDist, {
+    index: false,
+    setHeaders(res, filePath) {
+      const relativePath = path.relative(clientDist, filePath).replace(/\\/g, '/');
+      if (relativePath.startsWith('assets/')) {
+        res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+      } else if (relativePath === 'robots.txt') {
+        res.setHeader('Cache-Control', 'public, max-age=3600');
+      } else {
+        res.setHeader('Cache-Control', 'public, max-age=86400');
+      }
+    },
+  }));
   app.get('*', (req, res, next) => {
     if (req.path.startsWith('/api/')) return next();
     res.sendFile(path.join(clientDist, 'index.html'));

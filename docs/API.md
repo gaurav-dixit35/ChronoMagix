@@ -1,25 +1,65 @@
 # ChronoMagix API
 
-Base path: `/api`. All responses use `{ success: true, data }`; errors use `{ success: false, message, code?, errors? }`. Protected routes require `Authorization: Bearer <JWT>`. Admin routes require the `admin` role; the instructor schedule is scoped to the authenticated instructor.
+Base path: `/api`. JSON routes return `{ "success": true, "data": ... }`. Errors return `{ "success": false, "message": ..., "code": ..., "errors": ... }`; optional `code` and `errors` keys are omitted where not applicable. Protected requests use `Authorization: Bearer <JWT>`. Admin routes require role `admin`; `/instructor/lectures` always scopes to the authenticated instructor ID.
 
-| Method | Path | Access | Purpose |
+## Routes
+
+| Method | Path | Access | Request / response |
 |---|---|---|---|
-| GET | `/health` | Public | Status and UTC timestamp |
-| POST | `/auth/login` | Public | Login using email and password; returns token and safe user DTO |
-| GET | `/auth/me` | Signed in | Current user DTO |
-| GET | `/instructors` | Admin | Instructor list with lecture counts |
-| GET | `/instructors/availability?date=YYYY-MM-DD` | Admin | Instructor availability and booked course for a date |
-| GET | `/courses?search=&level=` | Admin | Filtered course list and lecture counts |
-| POST | `/courses` | Admin | Multipart course creation (`name`, `level`, `description`, `image`) |
-| GET | `/courses/:id` | Admin | Course with date-sorted populated lectures |
-| PUT | `/courses/:id` | Admin | Update course fields; optional multipart image |
-| DELETE | `/courses/:id` | Admin | Delete course and its lectures |
-| POST | `/courses/:id/lectures` | Admin | Create lecture (`instructorId`, `date`, optional `title`) |
-| GET | `/lectures?instructorId=&courseId=&from=&to=` | Admin | Filtered populated lecture list |
-| PATCH | `/lectures/:id` | Admin | Update instructor, date or title; rechecks clashes |
-| DELETE | `/lectures/:id` | Admin | Delete a lecture |
-| GET | `/instructor/lectures` | Instructor | The signed-in instructor’s schedule only |
+| GET | `/health` | Public | `data.status` is `ok`; includes a UTC timestamp. |
+| POST | `/auth/login` | Public | JSON `{ email, password }`; returns `{ token, user: { id, name, email, role } }`. Password is never returned. |
+| GET | `/auth/me` | Signed in | Returns the authenticated safe user DTO. |
+| GET | `/instructors` | Admin | Returns instructor `{ id, name, email, bio, lectureCount }` records. |
+| GET | `/instructors/availability?date=YYYY-MM-DD&excludeLectureId=` | Admin | Returns `{ id, name, available, bookedCourse? }` per instructor. `excludeLectureId` is used while editing an existing lecture. |
+| GET | `/courses?search=&level=` | Admin | Optional case-insensitive name search and `Beginner`, `Intermediate` or `Advanced` level filter; each result includes `lectureCount`. |
+| POST | `/courses` | Admin | Multipart fields `name`, `level`, `description`, `image`; responds HTTP 201 with the course. |
+| GET | `/courses/:id` | Admin | Returns course and its date-sorted lectures with instructor name/email. |
+| PUT | `/courses/:id` | Admin | Update one or more course fields. Multipart is accepted when replacing `image`; responds HTTP 200. |
+| DELETE | `/courses/:id` | Admin | Deletes the course and its lectures; returns `{ id }`. |
+| POST | `/courses/:id/lectures` | Admin | JSON `{ instructorId, date, title? }`; creates a lecture with HTTP 201. Missing title gets a generated `Batch N` value. |
+| GET | `/lectures?instructorId=&courseId=&from=&to=` | Admin | All filters are optional; `from` and `to` are inclusive `YYYY-MM-DD` bounds. Course and instructor details are populated. |
+| GET | `/lectures/:id` | Admin | Returns one lecture with populated course and instructor for edit screens. |
+| PATCH | `/lectures/:id` | Admin | JSON with one or more of `{ instructorId, date, title }`; rechecks instructor/date clash and returns the updated lecture. |
+| DELETE | `/lectures/:id` | Admin | Deletes a lecture and returns `{ id }`. |
+| GET | `/instructor/lectures` | Instructor | Returns only that instructor's date-sorted lectures with course details. |
 
-Lecture dates are real Gregorian dates encoded as `YYYY-MM-DD`; past dates are accepted. A duplicate instructor/date booking returns HTTP 409 with `INSTRUCTOR_DATE_CLASH` and conflict details. The unique compound index is authoritative under concurrent requests.
+## Dates, uploads and errors
 
-Uploads accept JPEG, PNG or WebP up to 2 MB. With `CLOUDINARY_URL`, images are uploaded to Cloudinary; otherwise a data URL is stored in MongoDB.
+Dates are strings in `YYYY-MM-DD` format and must be real Gregorian calendar dates. Past dates are valid. Dates remain date-only values; no time or timezone conversion is applied.
+
+Course images accept JPEG, PNG or WebP up to 2 MB. The multipart field name is `image`. When `CLOUDINARY_URL` is configured, the server uploads to Cloudinary; otherwise it stores a data URL in MongoDB.
+
+Common status codes:
+
+| Status | Meaning |
+|---|---|
+| 400 | Invalid request, date, or image type; response includes a readable message and validation details when present. |
+| 401 | Missing/invalid token or incorrect login credentials. |
+| 403 | Authenticated role cannot access the route. |
+| 404 | Record or route not found. |
+| 409 | Instructor already has a lecture on that date; code is `INSTRUCTOR_DATE_CLASH`. |
+| 413 | Image exceeds 2 MB. |
+| 429 | Rate limit reached; login permits 10 requests and the general API permits 300 requests per 15 minutes per client IP. |
+
+The lecture service checks for a clash first to provide a friendly message. MongoDB's unique `{ instructor: 1, date: 1 }` index is the final race-safe guarantee; duplicate-key failures are mapped to the same HTTP 409 response.
+
+### Example: login and create a lecture
+
+```http
+POST /api/auth/login
+Content-Type: application/json
+
+{"email":"admin@chronomagix.com","password":"Admin@123"}
+```
+
+Use the returned token in `Authorization: Bearer <token>` when calling protected routes:
+
+```http
+POST /api/courses/COURSE_ID/lectures
+Authorization: Bearer <token>
+Content-Type: application/json
+
+{"instructorId":"INSTRUCTOR_ID","date":"2026-12-10","title":"Batch 1"}
+```
+
+If that instructor already has a lecture on `2026-12-10`, the endpoint returns status 409 and `code: "INSTRUCTOR_DATE_CLASH"`.

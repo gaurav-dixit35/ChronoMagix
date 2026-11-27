@@ -1,0 +1,21 @@
+# Render Blueprint for the single-service Express + React deployment.
+services:
+  - type: web
+    name: chronomagix
+    runtime: node
+    plan: free
+    buildCommand: npm install --include=dev && npm --prefix server install --include=dev && npm --prefix client install --include=dev && npm run build
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: JWT_SECRET
+        generateValue: true
+      - key: MONGO_URI
+        sync: false
+      - key: CLIENT_ORIGIN
+        fromService:
+          type: web
+          name: chronomagix
+          envVarKey: RENDER_EXTERNAL_URL

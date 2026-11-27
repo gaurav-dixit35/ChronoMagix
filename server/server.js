@@ -5,7 +5,8 @@ import app from './app.js';
 
 async function start() {
   await connectDatabase(env.MONGO_URI);
-  const indexes = await Lecture.syncIndexes();
+  await Lecture.syncIndexes();
+  const indexes = await Lecture.collection.indexes();
   process.stdout.write(`Lecture indexes synchronized: ${JSON.stringify(indexes)}\n`);
   const server=app.listen(env.PORT,()=>process.stdout.write(`ChronoMagix API listening on ${env.PORT}\n`));
   const shutdown=async()=>{server.close();await disconnectDatabase();process.exit(0);}; process.on('SIGINT',shutdown); process.on('SIGTERM',shutdown);

@@ -1,10 +1,13 @@
 import { readFile } from 'node:fs/promises';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import mongoose from 'mongoose';
 import { env } from '../config/env.js';
 import { connectDatabase, disconnectDatabase } from '../config/db.js';
 import User from '../models/User.js';
 import Course from '../models/Course.js';
 import Lecture from '../models/Lecture.js';
+import { validateDump } from '../utils/dumpValidation.js';
 
 function withObjectIds(rows, fields) {
   return rows.map((row) => {
@@ -17,9 +20,10 @@ function withObjectIds(rows, fields) {
 
 async function importDump() {
   if (process.argv.includes('--confirm') !== true) throw new Error('Import replaces all three collections. Re-run with --confirm after backing up the target database.');
+  const dumpDirectory = path.resolve(process.env.CHRONOMAGIX_DUMP_DIR || fileURLToPath(new URL('../../dump/', import.meta.url)));
+  const [users, courses, lectures] = await Promise.all(['users', 'courses', 'lectures'].map(async (name) => JSON.parse(await readFile(path.join(dumpDirectory, `${name}.json`), 'utf8'))));
+  validateDump({ users, courses, lectures });
   await connectDatabase(env.MONGO_URI);
-  const base = new URL('../../dump/', import.meta.url);
-  const [users, courses, lectures] = await Promise.all(['users', 'courses', 'lectures'].map(async (name) => JSON.parse(await readFile(new URL(`${name}.json`, base), 'utf8'))));
   await Promise.all([User.deleteMany({}), Course.deleteMany({}), Lecture.deleteMany({})]);
   if (users.length) await User.collection.insertMany(withObjectIds(users, []));
   if (courses.length) await Course.collection.insertMany(withObjectIds(courses, ['createdBy']));

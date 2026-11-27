@@ -1,2 +1,2 @@
 import api from './api.js';
-export const instructorService={list:async()=>(await api.get('/instructors')).data.data,availability:async(date,signal)=>(await api.get('/instructors/availability',{params:{date},signal})).data.data,myLectures:async()=>(await api.get('/instructor/lectures')).data.data};
+export const instructorService={list:async(signal)=>(await api.get('/instructors',{signal})).data.data,availability:async(date,signal,excludeLectureId)=>(await api.get('/instructors/availability',{params:{date,excludeLectureId},signal})).data.data,myLectures:async(signal)=>(await api.get('/instructor/lectures',{signal})).data.data};

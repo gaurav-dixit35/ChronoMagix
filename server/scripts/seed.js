@@ -49,7 +49,14 @@ async function upsertUser(name, email, role, password) {
 }
 
 async function seed() {
+  const resetRequested = process.argv.includes('--reset');
+  if (resetRequested && process.env.CONFIRM_RESET !== 'yes') {
+    throw new Error('Reset requires explicit confirmation: set CONFIRM_RESET=yes and pass --reset.');
+  }
   await connectDatabase(env.MONGO_URI);
+  if (resetRequested) {
+    await Promise.all([User.deleteMany({}), Course.deleteMany({}), Lecture.deleteMany({})]);
+  }
   await Lecture.syncIndexes();
 
   const admin = await upsertUser('ChronoMagix Admin', 'admin@chronomagix.com', 'admin', 'Admin@123');
@@ -71,6 +78,7 @@ async function seed() {
 
   const base = '2026-11-27';
   let lectureCount = 0;
+  let lectureSkipped = 0;
   for (let courseIndex = 0; courseIndex < courses.length; courseIndex += 1) {
     for (let batch = 0; batch < 3; batch += 1) {
       // Cycle the six instructors across nine distinct dates without producing clashes.
@@ -81,17 +89,28 @@ async function seed() {
         date: addDays(base, (courseIndex * 3) + batch + 1),
         title: `Batch ${batch + 1}`,
       };
-      const result = await Lecture.updateOne(
-        { course: lecture.course, date: lecture.date },
-        { $setOnInsert: lecture },
-        { upsert: true, runValidators: true },
-      );
-      lectureCount += result.upsertedCount;
+      const [courseSlot, instructorSlot] = await Promise.all([
+        Lecture.exists({ course: lecture.course, date: lecture.date }),
+        Lecture.exists({ instructor: lecture.instructor, date: lecture.date }),
+      ]);
+      if (courseSlot || instructorSlot) { lectureSkipped += 1; continue; }
+      try {
+        const result = await Lecture.updateOne(
+          { course: lecture.course, date: lecture.date },
+          { $setOnInsert: lecture },
+          { upsert: true, runValidators: true },
+        );
+        lectureCount += result.upsertedCount;
+        if (!result.upsertedCount) lectureSkipped += 1;
+      } catch (error) {
+        if (error.code !== 11000) throw error;
+        lectureSkipped += 1;
+      }
     }
   }
 
   const indexes = await Lecture.collection.indexes();
-  process.stdout.write(`ChronoMagix seed complete.\nAdmin: 1; instructors: ${instructorUsers.length}; courses: ${courses.length}; lectures added: ${lectureCount}.\nLecture indexes: ${indexes.map(({ name, key, unique }) => `${name} ${JSON.stringify(key)}${unique ? ' unique' : ''}`).join('; ')}\n\nDemo credentials\nAdmin: admin@chronomagix.com / Admin@123\nInstructor: rahul@chronomagix.com / Instructor@123\n`);
+  process.stdout.write(`ChronoMagix seed complete.\nAdmin: 1; instructors: ${instructorUsers.length}; courses: ${courses.length}; lectures added: ${lectureCount}; lecture slots skipped: ${lectureSkipped}.\nLecture indexes: ${indexes.map(({ name, key, unique }) => `${name} ${JSON.stringify(key)}${unique ? ' unique' : ''}`).join('; ')}\n\nDemo credentials\nAdmin: admin@chronomagix.com / Admin@123\nInstructor: rahul@chronomagix.com / Instructor@123\n`);
 }
 
 try {
