@@ -22,5 +22,5 @@ export function Login(){
     <Field label="Email address" type="email" name="email" registration={register('email')} required error={errors.email?.message}/>
     <Field label="Password" type="password" name="password" registration={register('password')} required error={errors.password?.message}/>
     <Error>{errors.root?.server?.message}</Error><button className="button primary full" disabled={isSubmitting}>{isSubmitting?<span className="spinner" aria-label="Signing in"/>:'Sign in'}</button>
-  </form>{import.meta.env.VITE_SHOW_DEMO_HINTS==='true'&&<div className="demo-hints"><button type="button" onClick={()=>{setValue('email','admin@chronomagix.com');setValue('password','Admin@123')}}>Fill admin details</button><button type="button" onClick={()=>{setValue('email','rahul@chronomagix.com');setValue('password','Instructor@123')}}>Fill instructor details</button></div>}</div></section></main>;
+  </form>{import.meta.env.VITE_SHOW_DEMO_HINTS==='true'&&<div className="demo-hints"><button type="button" onClick={()=>{setValue('email','admin@chronomagix.com');setValue('password','Admin@123')}}>Fill admin details</button><button type="button" onClick={()=>{setValue('email','gaurav@chronomagix.com');setValue('password','Instructor@123')}}>Fill instructor details</button></div>}</div></section></main>;
 }

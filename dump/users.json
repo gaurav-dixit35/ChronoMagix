@@ -11,8 +11,8 @@
   },
   {
     "_id": "6b08aa292a6039db455d904f",
-    "name": "Rahul Sharma",
-    "email": "rahul@chronomagix.com",
+    "name": "Gaurav Dixit",
+    "email": "gaurav@chronomagix.com",
     "password": "$2a$10$1mjjslxkQRrnp1OFCyqcw.uJiIpkSEvq.vS6pdeuLjbMJUuhDN9Aq",
     "role": "instructor",
     "createdAt": "2026-11-26T21:52:41.141Z",

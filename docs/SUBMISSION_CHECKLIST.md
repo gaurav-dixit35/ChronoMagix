@@ -18,7 +18,7 @@ Use this checklist just before sending the assignment. Items marked complete are
 - [ ] Configure Atlas network access for the Render service; keep the connection string private.
 - [ ] Create/apply the Render web service from `render.yaml`, supply the Atlas `MONGO_URI`, and verify the production URL and `/api/health`.
 - [ ] Seed the new evaluation database once, if needed. Do not seed automatically on service startup.
-- [ ] Verify both demo logins in a private browser after deployment: `admin@chronomagix.com` / `Admin@123`; `rahul@chronomagix.com` / `Instructor@123`.
+- [ ] Verify both demo logins in a private browser after deployment: `admin@chronomagix.com` / `Admin@123`; `gaurav@chronomagix.com` / `Instructor@123`.
 - [ ] If using Cloudinary, create a separate submission account and set `CLOUDINARY_URL`; otherwise retain the MongoDB data URL fallback.
 - [ ] Record the walkthrough using `docs/DEMO_SCRIPT.md`; upload it to Drive and enable open-access viewing.
 - [ ] Provide source code through GitHub or Drive, with the JSON demo dump or a secure dump location. Do not commit real user dumps, Atlas URIs or secrets.

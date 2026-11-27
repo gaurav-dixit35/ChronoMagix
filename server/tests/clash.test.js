@@ -26,7 +26,7 @@ beforeEach(async () => {
   await Lecture.syncIndexes();
   [admin, instructorA, instructorB] = await User.create([
     { name: 'Admin User', email: 'admin@test.com', password: 'password1', role: 'admin' },
-    { name: 'Rahul Sharma', email: 'rahul@test.com', password: 'password1', role: 'instructor' },
+    { name: 'Gaurav Dixit', email: 'gaurav@test.com', password: 'password1', role: 'instructor' },
     { name: 'Priya Nair', email: 'priya@test.com', password: 'password1', role: 'instructor' },
   ]);
   [courseA, courseB] = await Course.create([

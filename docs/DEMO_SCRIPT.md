@@ -10,7 +10,7 @@ Record at 1280 px desktop width, then show the key screens at 360 px. Start with
 4. **Demonstrate the API race-safe rule.** In a REST client with the admin token hidden, make a second `POST /api/courses/:id/lectures` request for the same instructor and date under a different course. Show HTTP 409 and `INSTRUCTOR_DATE_CLASH`. Do not expose the bearer token in the recording. The automated test also demonstrates concurrent requests: exactly one receives 201 and the other 409.
 5. **Edit and clean up.** Change the temporary lecture date, delete one lecture with the confirmation dialog, then delete the temporary course. Show that its remaining lecture is cascaded away. This keeps the seeded example data intact.
 6. **Show the schedule lenses.** Open Admin → Lectures, show the table and Week view, then apply a course/date/instructor filter and point out that filters are URL-backed.
-7. **Sign in as instructor.** Use `rahul@chronomagix.com` / `Instructor@123`. Show Next Up, upcoming and past sections. Try an admin URL and show that the instructor is redirected. Sign out afterward.
+7. **Sign in as instructor.** Use `gaurav@chronomagix.com` / `Instructor@123`. Show Next Up, upcoming and past sections. Try an admin URL and show that the instructor is redirected. Sign out afterward.
 8. **Show mobile layout.** At 360 px, show the responsive navigation, course cards or lecture list, and instructor schedule. Keep the nested table's internal horizontal scrolling inside its panel.
 
 ## Before recording

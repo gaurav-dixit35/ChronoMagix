@@ -6,7 +6,7 @@ import User from '../models/User.js';
 import { addDays, todayKey } from '../utils/dateKey.js';
 
 const instructors = [
-  ['Rahul Sharma', 'rahul@chronomagix.com'],
+  ['Gaurav Dixit', 'gaurav@chronomagix.com'],
   ['Priya Nair', 'priya@chronomagix.com'],
   ['Amit Verma', 'amit@chronomagix.com'],
   ['Sneha Kulkarni', 'sneha@chronomagix.com'],
@@ -48,6 +48,28 @@ async function upsertUser(name, email, role, password) {
   return user;
 }
 
+async function migrateLegacyInstructor() {
+  const previous = await User.findOne({ email: 'rahul@chronomagix.com' });
+  if (!previous) return;
+
+  const current = await User.findOne({ email: 'gaurav@chronomagix.com' });
+  if (!current) {
+    previous.name = 'Gaurav Dixit';
+    previous.email = 'gaurav@chronomagix.com';
+    await previous.save();
+    return;
+  }
+
+  const previousLectures = await Lecture.find({ instructor: previous._id });
+  for (const lecture of previousLectures) {
+    const conflict = await Lecture.exists({ instructor: current._id, date: lecture.date });
+    if (conflict) throw new Error(`Cannot migrate Rahul's lecture on ${lecture.date}: Gaurav already has a lecture that day.`);
+    lecture.instructor = current._id;
+    await lecture.save();
+  }
+  await previous.deleteOne();
+}
+
 async function seed() {
   const resetRequested = process.argv.includes('--reset');
   if (resetRequested && process.env.CONFIRM_RESET !== 'yes') {
@@ -58,6 +80,7 @@ async function seed() {
     await Promise.all([User.deleteMany({}), Course.deleteMany({}), Lecture.deleteMany({})]);
   }
   await Lecture.syncIndexes();
+  await migrateLegacyInstructor();
 
   const admin = await upsertUser('ChronoMagix Admin', 'admin@chronomagix.com', 'admin', 'Admin@123');
   const instructorUsers = [];
@@ -110,7 +133,7 @@ async function seed() {
   }
 
   const indexes = await Lecture.collection.indexes();
-  process.stdout.write(`ChronoMagix seed complete.\nAdmin: 1; instructors: ${instructorUsers.length}; courses: ${courses.length}; lectures added: ${lectureCount}; lecture slots skipped: ${lectureSkipped}.\nLecture indexes: ${indexes.map(({ name, key, unique }) => `${name} ${JSON.stringify(key)}${unique ? ' unique' : ''}`).join('; ')}\n\nDemo credentials\nAdmin: admin@chronomagix.com / Admin@123\nInstructor: rahul@chronomagix.com / Instructor@123\n`);
+  process.stdout.write(`ChronoMagix seed complete.\nAdmin: 1; instructors: ${instructorUsers.length}; courses: ${courses.length}; lectures added: ${lectureCount}; lecture slots skipped: ${lectureSkipped}.\nLecture indexes: ${indexes.map(({ name, key, unique }) => `${name} ${JSON.stringify(key)}${unique ? ' unique' : ''}`).join('; ')}\n\nDemo credentials\nAdmin: admin@chronomagix.com / Admin@123\nInstructor: gaurav@chronomagix.com / Instructor@123\n`);
 }
 
 try {

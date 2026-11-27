@@ -63,7 +63,7 @@ If PowerShell blocks `npm.ps1`, use `npm.cmd` as shown. The Vite client proxies 
 | Role | Email | Password |
 | --- | --- | --- |
 | Admin | `admin@chronomagix.com` | `Admin@123` |
-| Instructor | `rahul@chronomagix.com` | `Instructor@123` |
+| Instructor | `gaurav@chronomagix.com` | `Instructor@123` |
 
 These are public demo credentials for evaluation. Do not use them for a real deployment or reuse either password for a personal account. The seed command is idempotent: it can be run again without creating duplicate demo records.
 
